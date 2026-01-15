@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>随便看看按钮</title>
+  <style>
+    :root {
+      --ink: #2b2a27;
+      --pencil: #4a4a46;
+      --paper: #f2e7cf;
+      --paper-dark: #e4d5b1;
+      --paper-stain: rgba(140, 110, 70, 0.15);
+      --accent: #d25c4c;
+      --accent-2: #4c7aa3;
+      --tape: rgba(255, 255, 255, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Comic Sans MS", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", cursive;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.7), transparent 45%),
+        radial-gradient(circle at 80% 12%, rgba(255, 255, 255, 0.45), transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.35), transparent 45%),
+        linear-gradient(180deg, var(--paper), var(--paper-dark));
+      background-attachment: fixed;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    body::before {
+      background:
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1) 1px, transparent 1px, transparent 6px),
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04) 1px, transparent 1px, transparent 7px);
+      mix-blend-mode: multiply;
+      opacity: 0.25;
+    }
+
+    body::after {
+      background:
+        radial-gradient(circle at 10% 10%, var(--paper-stain), transparent 45%),
+        radial-gradient(circle at 85% 30%, rgba(120, 90, 60, 0.12), transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(110, 80, 50, 0.1), transparent 45%);
+      mix-blend-mode: multiply;
+      opacity: 0.6;
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 40px 18px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .sketch-corner {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border: 2px dashed rgba(60, 60, 55, 0.3);
+      border-radius: 20px 30px 20px 40px;
+      transform: rotate(-8deg);
+      opacity: 0.6;
+    }
+
+    .corner-left {
+      top: 24px;
+      left: 12px;
+    }
+
+    .corner-right {
+      bottom: 30px;
+      right: 18px;
+      transform: rotate(14deg);
+    }
+
+    .container {
+      width: min(720px, 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .title {
+      font-size: clamp(28px, 5vw, 42px);
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.05);
+      position: relative;
+      padding: 6px 18px;
+    }
+
+    .title::after {
+      content: "冒险笔记 · 随手草稿";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translate(-50%, 10px) rotate(-3deg);
+      font-size: 14px;
+      color: rgba(40, 40, 38, 0.6);
+      letter-spacing: 1px;
+    }
+
+    .doodle-wrap {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .doodle {
+      position: absolute;
+      font-size: 18px;
+      color: rgba(40, 40, 35, 0.55);
+      transform: rotate(-6deg);
+    }
+
+    .doodle.star {
+      font-size: 20px;
+      color: rgba(210, 92, 76, 0.7);
+    }
+
+    .doodle.arrow {
+      font-size: 24px;
+    }
+
+    .main-button {
+      position: relative;
+      padding: 22px 52px;
+      border-radius: 50px 40px 48px 30px;
+      border: 3px solid var(--ink);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(240, 224, 200, 0.9)),
+        radial-gradient(circle at 20% 30%, rgba(242, 210, 174, 0.6), transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(210, 160, 140, 0.4), transparent 55%);
+      box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2), 0 8px 18px rgba(0, 0, 0, 0.12);
+      font-size: clamp(22px, 5vw, 32px);
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--ink);
+      transform: rotate(-1deg);
+      transition: transform 0.2s ease;
+    }
+
+    .main-button::before,
+    .main-button::after {
+      content: "";
+      position: absolute;
+      border: 2px dashed rgba(40, 40, 35, 0.5);
+      border-radius: 45px;
+      inset: 8px 10px;
+      transform: rotate(2deg);
+    }
+
+    .main-button::after {
+      inset: 14px 18px;
+      border-style: dotted;
+      opacity: 0.5;
+    }
+
+    .main-button:hover {
+      transform: rotate(1deg) scale(1.02);
+    }
+
+    .main-button:active {
+      transform: rotate(-2deg) scale(0.98);
+    }
+
+    .main-button.shake {
+      animation: shake 0.45s ease-in-out;
+    }
+
+    .splash {
+      position: absolute;
+      inset: -12px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(76, 122, 163, 0.25), transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(210, 92, 76, 0.2), transparent 55%);
+      border-radius: 60px 50px 70px 40px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .main-button.shake .splash {
+      animation: splash 0.6s ease;
+    }
+
+    @keyframes shake {
+      0% { transform: rotate(-1deg) translateX(0); }
+      20% { transform: rotate(2deg) translateX(-2px); }
+      40% { transform: rotate(-3deg) translateX(2px); }
+      60% { transform: rotate(2deg) translateX(-1px); }
+      80% { transform: rotate(-1deg) translateX(1px); }
+      100% { transform: rotate(0deg) translateX(0); }
+    }
+
+    @keyframes splash {
+      0% { opacity: 0; transform: scale(0.9); }
+      50% { opacity: 1; }
+      100% { opacity: 0; transform: scale(1.08); }
+    }
+
+    .note {
+      width: min(640px, 100%);
+      min-height: 140px;
+      padding: 24px 28px 28px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(246, 234, 210, 0.9)),
+        radial-gradient(circle at 80% 20%, rgba(255, 230, 180, 0.4), transparent 45%);
+      border: 2px solid rgba(40, 40, 35, 0.5);
+      border-radius: 18px 28px 14px 24px;
+      box-shadow: 4px 6px 0 rgba(0, 0, 0, 0.15);
+      position: relative;
+      font-size: 18px;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      opacity: 0.95;
+    }
+
+    .note::before {
+      content: "";
+      position: absolute;
+      top: -14px;
+      left: 40px;
+      width: 120px;
+      height: 26px;
+      background: var(--tape);
+      border: 1px solid rgba(80, 80, 75, 0.2);
+      transform: rotate(-3deg);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .note::after {
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      right: 60px;
+      width: 90px;
+      height: 24px;
+      background: var(--tape);
+      border: 1px solid rgba(80, 80, 75, 0.2);
+      transform: rotate(4deg);
+    }
+
+    .note-header {
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--accent);
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    .note-content {
+      font-size: clamp(18px, 3.5vw, 22px);
+    }
+
+    .note-sticker {
+      align-self: flex-start;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 2px dashed rgba(40, 40, 35, 0.45);
+      border-radius: 12px 18px 10px 20px;
+      transform: rotate(-4deg);
+      font-size: 14px;
+      color: rgba(40, 40, 35, 0.7);
+    }
+
+    .note.empty .note-content {
+      color: rgba(40, 40, 35, 0.45);
+    }
+
+    .footer-scribble {
+      font-size: 14px;
+      opacity: 0.6;
+      transform: rotate(-2deg);
+      align-self: flex-end;
+      margin-right: 16px;
+    }
+
+    .stamp {
+      position: absolute;
+      top: 20px;
+      right: 0;
+      transform: rotate(6deg);
+      border: 2px dashed rgba(40, 40, 35, 0.6);
+      padding: 6px 10px;
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    @media (max-width: 600px) {
+      .note {
+        padding: 20px;
+      }
+
+      .main-button {
+        padding: 18px 36px;
+      }
+
+      .note::before {
+        left: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="sketch-corner corner-left"></div>
+    <div class="sketch-corner corner-right"></div>
+
+    <div class="doodle-wrap">
+      <div class="doodle star" style="top: 18%; left: 6%;">✦</div>
+      <div class="doodle" style="top: 25%; right: 10%;">☞ 注意喵</div>
+      <div class="doodle arrow" style="bottom: 18%; left: 8%;">↝</div>
+      <div class="doodle" style="bottom: 8%; right: 15%; transform: rotate(8deg);">小记号: ?</div>
+      <div class="doodle star" style="top: 62%; right: 6%;">✺</div>
+      <div class="doodle" style="top: 45%; left: 80%; transform: rotate(-9deg);">随手涂</div>
+    </div>
+
+    <div class="container">
+      <div class="stamp">手绘 001</div>
+      <div class="title">随便看看按钮</div>
+      <button class="main-button" id="surpriseButton">
+        随便看看
+        <span class="splash"></span>
+      </button>
+
+      <div class="note empty" id="note">
+        <div class="note-header">今日小纸条</div>
+        <div class="note-content" id="noteContent">按下按钮，纸条会冒出一点怪事～</div>
+        <div class="note-sticker" id="noteSticker">贴纸：等待中</div>
+        <div class="footer-scribble">✎ 手绘记录中</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const surpriseItems = [
+      { text: "发现一只偷懒的风，把云揉成棉花糖。", sticker: "☁️ 风味" },
+      { text: "地板记得昨晚梦见自己是滑梯。", sticker: "🛝 梦境" },
+      { text: "今日任务：把影子叫醒三次。", sticker: "📌 待办" },
+      { text: "怪趣提醒：别喂盆栽听爵士，它会长双倍。", sticker: "🎷 盆栽" },
+      { text: "冷知识：拇指会记得昨天按过的按钮。", sticker: "🖐️ 手指" },
+      { text: "荒诞报告：窗外的鸽子组建了圆桌会议。", sticker: "🕊️ 报告" },
+      { text: "贴纸风线索：星星今天偷穿了袜子。", sticker: "✨ 星袜" },
+      { text: "笑话：为什么地图怕下雨？它会皱起来。", sticker: "🗺️ 皱纹" },
+      { text: "记录：风铃刚学会打哈欠。", sticker: "🔔 哈欠" },
+      { text: "今日观察：橘子皮像一张偷懒的地形图。", sticker: "🍊 地图" },
+      { text: "迷你任务：给桌角画两只眼睛。", sticker: "👀 DIY" },
+      { text: "传闻：纸飞机夜里会交换路线图。", sticker: "🛩️ 路线" },
+      { text: "怪趣提醒：别和雨伞比谁更高冷。", sticker: "☂️ 高冷" },
+      { text: "冷知识：耳朵喜欢收集风的细节。", sticker: "🌬️ 采样" },
+      { text: "荒诞事件：咖啡豆排队去看海。", sticker: "☕️ 海边" },
+      { text: "笑话：钟表为什么慌？它害怕被问" + "“几点了？”", sticker: "⏰ 慌张" },
+      { text: "记录：铅笔今天画了自己的肖像。", sticker: "✏️ 自画像" },
+      { text: "今日小任务：把拖鞋当作小船摆正。", sticker: "🩴 小船" },
+      { text: "贴纸线索：落叶写了封回家信。", sticker: "🍂 信笺" },
+      { text: "怪趣提醒：别让冰箱知道你会唱歌。", sticker: "🧊 合唱" },
+      { text: "冷知识：袜子更懂地心引力。", sticker: "🧦 重力" },
+      { text: "荒诞报告：猫在收集未完成的哈欠。", sticker: "🐈 哈欠" },
+      { text: "笑话：门把手说它只是个圆场。", sticker: "🚪 圆场" },
+      { text: "记录：雨滴练习跳踢踏舞。", sticker: "💧 踢踏" },
+      { text: "今日观察：邮票像戴帽子的饼干。", sticker: "📮 饼干" },
+      { text: "迷你任务：给杯子起个绰号。", sticker: "🥤 绰号" },
+      { text: "传闻：电梯偷偷写诗给楼梯。", sticker: "🛗 诗" },
+      { text: "怪趣提醒：别对镜子讲冷笑话，它会起雾。", sticker: "🪞 起雾" },
+      { text: "冷知识：键盘会记得你没按下去的那一个字。", sticker: "⌨️ 空白" },
+      { text: "荒诞事件：街灯在练习眨眼节奏。", sticker: "💡 节奏" }
+    ];
+
+    let shuffled = [];
+    let index = 0;
+
+    const button = document.getElementById("surpriseButton");
+    const note = document.getElementById("note");
+    const noteContent = document.getElementById("noteContent");
+    const noteSticker = document.getElementById("noteSticker");
+
+    function shuffleItems() {
+      shuffled = surpriseItems.slice();
+      for (let i = shuffled.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      index = 0;
+    }
+
+    function nextItem() {
+      if (index >= shuffled.length) {
+        shuffleItems();
+      }
+      const item = shuffled[index];
+      index += 1;
+      return item;
+    }
+
+    function showSurprise() {
+      if (!shuffled.length) {
+        shuffleItems();
+      }
+
+      const { text, sticker } = nextItem();
+      noteContent.textContent = text;
+      noteSticker.textContent = `贴纸：${sticker}`;
+      note.classList.remove("empty");
+
+      button.classList.remove("shake");
+      void button.offsetWidth;
+      button.classList.add("shake");
+    }
+
+    button.addEventListener("click", showSurprise);
+  </script>
+</body>
+</html>
